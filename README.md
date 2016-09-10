@@ -23,7 +23,7 @@ $ cd docker-wordpress-nginx
 $ sudo docker build -t="eugeneware/docker-wordpress-nginx" .
 ```
 
-## Usage
+### Usage
 
 To spawn a new instance of wordpress on port 80.  The -p 80:80 maps the internal docker port 80 to the outside port 80 of the host machine...
 
