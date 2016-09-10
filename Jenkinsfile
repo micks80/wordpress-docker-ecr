@@ -1,6 +1,6 @@
 node {
     
-  stage 'Checkout'
+  stage 'Checkoutt'
   git 'https://github.com/micks80/docker-wordpress-nginx.git'
   
   stage 'Package Docker image'
