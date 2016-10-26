@@ -4,7 +4,7 @@ node {
   git 'https://github.com/micks80/wordpress-docker-ecr.git'
 
   stage 'Package Docker image'
-  def img = docker.build('dockpress:${env.BUILD_NUMBER}', '.')
+  def img = docker.build("dockpress:${env.BUILD_NUMBER}", '.')
 
   stage 'Publish'
   echo "Publishing docker container"
