@@ -1,13 +1,14 @@
 node {
+
   stage 'Checkout'
   git 'https://github.com/micks80/wordpress-docker-ecr.git'
 
   stage 'Package Docker image'
-  def img = docker.build('dockpress:latest', '.')
+  def img = docker.build('dockpress:${env.BUILD_NUMBER}', '.')
 
   stage 'Publish'
   echo "Publishing docker container"
   sh "\$(aws ecr get-login --region us-east-1)"
-  sh "docker tag dockpress:latest 560414214996.dkr.ecr.us-east-1.amazonaws.com/dockpress:latest"
-  sh "docker push 560414214996.dkr.ecr.us-east-1.amazonaws.com/dockpress:latest"
+  sh "docker tag dockpress:latest 560414214996.dkr.ecr.us-east-1.amazonaws.com/dockpress:${env.BUILD_NUMBER}"
+  sh "docker push 560414214996.dkr.ecr.us-east-1.amazonaws.com/dockpress:${env.BUILD_NUMBER}"
 }
