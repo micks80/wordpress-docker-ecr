@@ -8,6 +8,6 @@ node {
   stage 'Publish'
   echo "Publishing docker container"
   sh "\$(aws ecr get-login)"
-  sh docker tag dockpress:latest 560414214996.dkr.ecr.us-east-1.amazonaws.com/dockpress:latest
+  sh "docker tag dockpress:latest 560414214996.dkr.ecr.us-east-1.amazonaws.com/dockpress:latest"
   sh "docker push 560414214996.dkr.ecr.us-east-1.amazonaws.com/dockpress:latest"
 }
