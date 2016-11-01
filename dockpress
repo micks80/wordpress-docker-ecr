@@ -1,0 +1,18 @@
+node {
+  def aws_ecr_url = "${AWS_ECR_URL}"
+  def aws_ecr_repo = "${AWS_ECR_REPO}"
+  def aws_ecr_image_path = "${aws_ecr_repo}:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
+  def aws_ecr_login_cmd = "aws ecr get-login --region ${AWS_ECR_REGION}"
+  
+  stage 'Checkout Git Repository'
+  checkout scm
+
+  stage 'Build and Package Docker image'
+  def img = docker.build("${aws_ecr_image_path}", '.')
+
+  stage 'Publish'
+  echo "Publishing docker container"
+  sh "\$(${aws_ecr_login_cmd})"
+  sh "docker tag ${aws_ecr_image_path} ${aws_ecr_url}/${aws_ecr_image_path}"
+  sh "docker push ${aws_ecr_url}/${aws_ecr_image_path}"
+}
