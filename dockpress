@@ -1,14 +1,19 @@
 node {
+  def aws_ecr_url = '560414214996.dkr.ecr.us-east-1.amazonaws.com'
+  def aws_ecr_repo = 'dockpress'
+  def aws_ecr_login_cmd = 'aws ecr get-login --region us-east-1'
 
-  stage 'Checkout'
-  git 'https://github.com/micks80/wordpress-docker-ecr.git'
+  echo "AWS ECR REPO: ${aws_ecr_url}:${aws_ecr_repo}"
+ 
+  stage 'Checkout Git Repository'
+  checkout scm
 
-  stage 'Package Docker image'
-  def img = docker.build("dockpress:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}", '.')
+  stage 'Build and Package Docker image'
+  def img = docker.build("${aws_ecr_repo}:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}", '.')
 
   stage 'Publish'
   echo "Publishing docker container"
-  sh "\$(aws ecr get-login --region us-east-1)"
-  sh "docker tag dockpress:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER} 560414214996.dkr.ecr.us-east-1.amazonaws.com/dockpress:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
-  sh "docker push 560414214996.dkr.ecr.us-east-1.amazonaws.com/dockpress:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
+  sh "\$(${aws_ecr_login_cmd})"
+  sh "docker tag ${aws_ecr_repo}:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER} ${aws_ecr_url}/${aws_ecr_repo}:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
+  sh "docker push ${aws_ecr_url}/${aws_ecr_repo}:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
 }
