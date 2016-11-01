@@ -9,6 +9,6 @@ node {
   stage 'Publish'
   echo "Publishing docker container"
   sh "\$(aws ecr get-login --region us-east-1)"
-  sh "docker tag dockpress:latest 560414214996.dkr.ecr.us-east-1.amazonaws.com/dockpress:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
+  sh "docker tag dockpress:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER} 560414214996.dkr.ecr.us-east-1.amazonaws.com/dockpress:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
   sh "docker push 560414214996.dkr.ecr.us-east-1.amazonaws.com/dockpress:${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
 }
